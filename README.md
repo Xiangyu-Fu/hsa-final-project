@@ -5,3 +5,8 @@
 Machine: Raspberry Pi 4B
 
 OS: Ubuntu Server 20.04 LTS
+
+## Python requirement
+
+- pygame
+- pyserial
