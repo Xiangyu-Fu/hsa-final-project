@@ -9,7 +9,15 @@ SLAM mapping and navigation simulation project
  The **slam_bot_initial** folder provides the initial slam_bot package,if you want to build package by yourself,this is good choice!
 
 
-
+## Start up
+```bash
+$ sudo apt-get install ros-kinetic-navigation
+$ sudo apt-get install ros-kinetic-map-server
+$ sudo apt-get install ros-kinetic-move-base
+$ rospack profile
+$ sudo apt-get install ros-kinetic-amcl
+$ sudo apt-get install ros-kinetic-rtabmap-ros
+```
 
 ## Launch
 ```
