@@ -1,0 +1,10 @@
+controller_frequency: 5.0
+
+TrajectoryPlannerROS:
+  holonomic_robot: false
+  publish_cost_grid_pc: true
+  pdist_scale: 1.0
+  gdist_scale: 0.4
+  occdist_scale: 0.01
+
+
