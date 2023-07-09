@@ -22,7 +22,7 @@ $ sudo apt-get install ros-noetic-rtabmap-ros
 
 ## How to Launch
 ```bash
-$ roslaunch hsa_bot hsa_world.launch
+$ roslaunch hsa_bot sim.launch
 ```
 
 ## How to Create a map
@@ -38,7 +38,11 @@ Then save the map
 rosrun map_server map_saver
 ```
 
-### real world
+## real world
+
+Frist, change the `frame_id` to `base_link` in `rplidar_a1.launch`.
+
+
 ```bash
-rosrun gmapping slam_gmapping scan:=/scan
+$ roslaunch hsa_bot real.launch
 ```
