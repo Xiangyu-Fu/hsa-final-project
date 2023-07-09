@@ -1,0 +1,19 @@
+<launch>
+
+    <include file="$(find hsa_bot)/launch/robot_description.launch"/>
+    <include file="$(find hsa_bot)/launch/amcl.launch"/>
+
+    <arg name="world" default="empty"/> 
+    <arg name="paused" default="false"/>
+    <arg name="use_sim_time" default="true"/>
+    <arg name="gui" default="false"/>
+    <arg name="headless" default="false"/>
+    <arg name="debug" default="false"/>
+
+    <!--launch Lidar-->
+    <include file="$(find rplidar_ros)/launch/rplidar_a1.launch" />
+
+    <!--launch rviz-->
+    <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find hsa_bot)/config/real.rviz"/>
+
+</launch>
