@@ -10,3 +10,8 @@ OS: Ubuntu Server 20.04 LTS
 
 - `evdev` for linux input system read
 
+## ROS dependencies
+
+```sh
+sudo apt-get install ros-noetic-ros-control ros-noetic-ros-controllers
+```
