@@ -22,11 +22,12 @@ $ sudo apt-get install ros-noetic-rtabmap-ros
 
 ## How to Launch
 ```bash
-$ roslaunch hsa_bot hsa_world.launch
+$ roslaunch hsa_bot sim.launch
 ```
 
 ## How to Create a map
 
+### simulator
 Open a new terminal, open `rqt`, and open robot steering plugin.
 ```bash
 rosrun gmapping slam_gmapping scan:=/hsa_bot/laser/scan
@@ -35,4 +36,13 @@ rosrun gmapping slam_gmapping scan:=/hsa_bot/laser/scan
 Then save the map
 ```bash
 rosrun map_server map_saver
-``````
+```
+
+## real world
+
+Frist, change the `frame_id` to `base_link` in `rplidar_a1.launch`.
+
+
+```bash
+$ roslaunch hsa_bot real.launch
+```
