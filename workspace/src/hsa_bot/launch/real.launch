@@ -28,6 +28,12 @@
     <!--launch Lidar-->
     <include file="$(find rplidar_ros)/launch/rplidar_a1.launch" />
 
+    <node name="real_robot" pkg="hsa_robot" type="real_robot.py" output="log" respawn="true">
+
+      <param name="test" value="true"/>
+      <param name="subscribed_topics" value="cmd_vel"/>
+
+    </node>
     <!--launch rviz-->
     <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find hsa_bot)/config/real.rviz"/>
 
