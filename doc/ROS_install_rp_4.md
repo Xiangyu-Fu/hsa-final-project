@@ -111,3 +111,4 @@ sudo service start ssh
 如果 ssh 在您的树莓派上处于活动状态，您可以通过终端从计算机登录到目标设备。
 
 
+-rw-r--r-- 1 root root 2.0G Jul 10 10:03 /swapfile

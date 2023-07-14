@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "hsa_bot",
+			"path": "plateformIO/hsa_bot"
+		}
+	],
+	"settings": {}
+}
