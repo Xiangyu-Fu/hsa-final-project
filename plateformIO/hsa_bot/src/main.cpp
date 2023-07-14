@@ -54,7 +54,7 @@
 //------------------------------------------------------//
 
 // Setup the OpenBot version (DIY, PCB_V1, PCB_V2, RTR_TT, RC_CAR, LITE, RTR_TT2, RTR_520, DIY_ESP32)
-#define OPENBOT PCB_V2
+#define OPENBOT PCB_V1
 
 //------------------------------------------------------//
 // SETTINGS - Global settings
@@ -178,8 +178,11 @@ const float VOLTAGE_MIN = 2.5f;
 const float VOLTAGE_LOW = 9.0f;
 const float VOLTAGE_MAX = 12.6f;
 const float ADC_FACTOR = 5.0 / 1023;
+#define attachPinChangeInterrupt attachInterrupt
+#define detachPinChangeInterrupt detachInterrupt
+#define digitalPinToPinChangeInterrupt digitalPinToInterrupt
 #define HAS_INDICATORS 1
-#define HAS_SONAR 1
+#define HAS_SONAR 0
 #define SONAR_MEDIAN 0
 #define HAS_SPEED_SENSORS_FRONT 1
 #define HAS_OLED 0
@@ -188,10 +191,10 @@ const int PIN_PWM_L2 = 10;
 const int PIN_PWM_R1 = 5;
 const int PIN_PWM_R2 = 6;
 const int PIN_SPEED_LF = 2;
-const int PIN_SPEED_RF = 4;
+const int PIN_SPEED_RF = 3;
 const int PIN_VIN = A7;
-const int PIN_TRIGGER = 3;
-const int PIN_ECHO = 3;
+const int PIN_TRIGGER = 12;
+const int PIN_ECHO = 11;
 const int PIN_LED_LI = 7;
 const int PIN_LED_RI = 8;
 
@@ -205,8 +208,11 @@ const float VOLTAGE_MIN = 2.5f;
 const float VOLTAGE_LOW = 9.0f;
 const float VOLTAGE_MAX = 12.6f;
 const float ADC_FACTOR = 5.0 / 1023;
+#define attachPinChangeInterrupt attachInterrupt
+#define detachPinChangeInterrupt detachInterrupt
+#define digitalPinToPinChangeInterrupt digitalPinToInterrupt
 #define HAS_INDICATORS 1
-#define HAS_SONAR 1
+#define HAS_SONAR 0
 #define SONAR_MEDIAN 0
 #define HAS_SPEED_SENSORS_FRONT 1
 #define HAS_OLED 0
@@ -233,7 +239,7 @@ const float VOLTAGE_LOW = 9.0f;
 const float VOLTAGE_MAX = 12.6f;
 const float ADC_FACTOR = 5.0 / 1023;
 #define HAS_INDICATORS 1
-#define HAS_SONAR 1
+#define HAS_SONAR 
 #define SONAR_MEDIAN 0
 #define HAS_BUMPER 1
 #define HAS_SPEED_SENSORS_FRONT 1
