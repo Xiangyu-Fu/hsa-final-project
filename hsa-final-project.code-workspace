@@ -6,6 +6,9 @@
 		{
 			"name": "hsa_bot",
 			"path": "plateformIO/hsa_bot"
+		},
+		{
+			"path": "workspace"
 		}
 	],
 	"settings": {}

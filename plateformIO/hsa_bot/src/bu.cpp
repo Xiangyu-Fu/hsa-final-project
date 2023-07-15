@@ -1,3 +1,4 @@
+#if 0
 // Required App Version: 0.7.0
 // ---------------------------------------------------------------------------
 // This Arduino Nano sketch accompanies the OpenBot Android application.
@@ -191,10 +192,10 @@ const int PIN_PWM_L2 = 10;
 const int PIN_PWM_R1 = 5;
 const int PIN_PWM_R2 = 6;
 const int PIN_SPEED_LF = 2;
-const int PIN_SPEED_RF = 3;
+const int PIN_SPEED_RF = 4;
 const int PIN_VIN = A7;
-const int PIN_TRIGGER = 4;
-const int PIN_ECHO = 4;
+const int PIN_TRIGGER = 3;
+const int PIN_ECHO = 3;
 const int PIN_LED_LI = 7;
 const int PIN_LED_RI = 8;
 
@@ -1924,4 +1925,5 @@ void update_speed_rm() {
     counter_rm++;
   }
 }
+#endif
 #endif

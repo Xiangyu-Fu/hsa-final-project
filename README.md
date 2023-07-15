@@ -10,3 +10,7 @@ OS: Ubuntu Server 20.04 LTS
 
 - `evdev` for linux input system read
 
+
+
+## BUG
+PIN error, arduino pin4 doesn't support interrupt, connect the pin 4 to pin 3.
