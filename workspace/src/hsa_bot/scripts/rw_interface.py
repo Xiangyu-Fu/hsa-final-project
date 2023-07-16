@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 import tf
@@ -23,10 +23,10 @@ class VelocityToOdom:
         self.y = 0.0
         self.theta = 0.0
 
-        # Subscriber for "/cmd_vel" topic
-        rospy.Subscriber("cmd_vel", Twist, self.cmd_vel_callback)
+        # Subscriber for "/key_vel" topic
+        rospy.Subscriber("key_vel", Twist, self.key_vel_callback)
 
-    def cmd_vel_callback(self, msg):
+    def key_vel_callback(self, msg):
         # Assume a constant time step
         dt = 0.01
 
@@ -44,7 +44,7 @@ class VelocityToOdom:
         odom = Odometry()
         odom.header.stamp = rospy.Time.now()
         odom.header.frame_id = "odom"
-        odom.child_frame_id = "base_footprint"
+        odom.child_frame_id = "robot_footprints"
 
         # Set the position
         odom.pose.pose.position.x = self.x
@@ -64,23 +64,23 @@ class VelocityToOdom:
         # Publish the odometry message
         self.odom_pub.publish(odom)
 
-        # Also publish the transform over tf
-        self.odom_broadcaster.sendTransform(
-            (self.x, self.y, 0.),
-            tf.transformations.quaternion_from_euler(0, 0, self.theta),
-            rospy.Time.now(),
-            "base_footprint",
-            "odom"
-        )
+        # # Also publish the transform over tf
+        # self.odom_broadcaster.sendTransform(
+        #     (self.x, self.y, 0.),
+        #     tf.transformations.quaternion_from_euler(0, 0, self.theta),
+        #     rospy.Time.now(),
+        #     "robot_footprint",
+        #     "odom"
+        # )
 
-        # Publish the static transform from "base_link" to "robot_footprint"
-        self.base_link_broadcaster.sendTransform(
-            (0, 0, 0),
-            tf.transformations.quaternion_from_euler(0, 0, 0),
-            rospy.Time.now(),
-            "robot_footprint",
-            "base_link"
-        )
+        # # Publish the static transform from "base_link" to "robot_footprint"
+        # self.base_link_broadcaster.sendTransform(
+        #     (0, 0, 0),
+        #     tf.transformations.quaternion_from_euler(0, 0, 0),
+        #     rospy.Time.now(),
+        #     "robot_footprint",
+        #     "base_link"
+        # )
 
     def run(self):
         # Use a constant rate loop
