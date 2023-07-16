@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-  <node pkg="hsa_bot" type="bot_br.py" name="tf_broadcaster" output="screen">
-  </node>
-</launch>

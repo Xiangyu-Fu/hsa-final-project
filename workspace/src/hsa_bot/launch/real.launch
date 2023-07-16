@@ -10,7 +10,6 @@
     <arg name="headless" default="false"/>
     <arg name="debug" default="false"/>
 
-    <include file="$(find hsa_bot)/launch/bot_br.launch"/>
 
     <!-- <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg name="world_name" value="$(find hsa_bot)/worlds/test.world"/>
@@ -26,7 +25,10 @@
         output="screen" args="-urdf -param robot_description -model hsa_bot"/> -->
 
     <!--launch Lidar-->
-    <include file="$(find rplidar_ros)/launch/rplidar_a1.launch" />
+    <!-- <include file="$(find rplidar_ros)/launch/rplidar_a1.launch" /> -->
+
+    <!--run rw_interface python srcipt-->
+    <node name="rw_interface" pkg="hsa_bot" type="rw_interface.py" output="screen"/>
 
     <!--launch rviz-->
     <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find hsa_bot)/config/real.rviz"/>

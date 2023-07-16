@@ -17,7 +17,8 @@ $ sudo apt-get install ros-noetic-map-server
 $ sudo apt-get install ros-noetic-move-base
 $ rospack profile
 $ sudo apt-get install ros-noetic-amcl
-$ sudo apt-get install ros-noetic-rtabmap-ros
+$ sudo apt-get install ros-noetic-slam-gmapping
+
 ```
 
 ## How to Launch
