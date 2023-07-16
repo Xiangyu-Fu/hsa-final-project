@@ -172,7 +172,7 @@ const int PIN_LED_RI = 7;
 #elif (OPENBOT == PCB_V1)
 const String robot_type = "PCB_V1";
 #define MCU NANO
-#define HAS_VOLTAGE_DIVIDER 1
+#define HAS_VOLTAGE_DIVIDER 0
 const float VOLTAGE_DIVIDER_FACTOR = (100 + 33) / 33;
 const float VOLTAGE_MIN = 2.5f;
 const float VOLTAGE_LOW = 9.0f;
@@ -741,7 +741,7 @@ volatile int counter_lm = 0;
 volatile int counter_rm = 0;
 float rpm_left = 0;
 float rpm_right = 0;
-unsigned long wheel_interval = 1000;  // Interval for sending wheel odometry
+unsigned long wheel_interval = 100;  // Interval for sending wheel odometry
 unsigned long wheel_time = 0;
 #endif
 
