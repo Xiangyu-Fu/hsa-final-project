@@ -51,7 +51,6 @@ alias hsa_mode='export ROS_IP=192.168.178.22 && export ROS_MASTER_URI=http://ubu
 In real robot you need to run:
 ```bash
 $ roslaunch hsa_bot real.launch has_map:=false
-$ rosrun gmapping slam_gmapping scan:=/scan
 ```
 
 In your local computer:
