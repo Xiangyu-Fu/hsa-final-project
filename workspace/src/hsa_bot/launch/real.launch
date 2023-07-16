@@ -28,7 +28,7 @@
     <include file="$(find rplidar_ros)/launch/rplidar_a1.launch" />
 
     <!--run rw_interface python srcipt-->
-    <node name="rw_interface" pkg="hsa_bot" type="rw_interface.py" output="screen"/>
+    <node name="robot_controller" pkg="hsa_bot" type="robot_controller.py" output="screen"/>
 
     <!--launch rviz-->
     <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find hsa_bot)/config/real.rviz"/>
