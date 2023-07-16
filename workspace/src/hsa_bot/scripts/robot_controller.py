@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 from geometry_msgs.msg import Twist, Quaternion
@@ -11,12 +11,17 @@ from math import sin, cos, pi
 
 class RobotController:
     def __init__(self):
-        self.serial_port = '/dev/ttyUSB0'  # Change to your serial port
+        self.serial_port = '/dev/ttyUSB1'  # Change to your serial port
         self.baud_rate = 115200  # Change to your baud rate
         self.ser = serial.Serial(self.serial_port, self.baud_rate)
 
+        self.ser_init = False
+
         self.odom_pub = rospy.Publisher("odom", Odometry, queue_size=50)
         self.odom_broadcaster = TransformBroadcaster()
+
+        # new tf broadcaster
+        self.br = tf.TransformBroadcaster()
         
         self.cmd_vel_sub = rospy.Subscriber("cmd_vel", Twist, self.cmd_vel_callback)
 
@@ -32,8 +37,9 @@ class RobotController:
         # e.g., "c100, 100". Please modify this part as needed
         self.send_command(linear_vel, angular_vel)
 
-    def send_command(self, linear_vel, angular_vel):
-        command = "c{}, {}".format(linear_vel, angular_vel)
+    def send_command(self, left_command, right_command):
+        command = "c{}, {}\n".format(left_command, right_command)
+        print(command)
         self.ser.write(command.encode())
 
     def parse_sensor_data(self, data):
@@ -45,60 +51,75 @@ class RobotController:
         return left_velocity, right_velocity
 
     def publish_odometry(self):
-        # Here, read your sensor data, e.g., "W100, 100", from the serial port
-        sensor_data = self.ser.readline()
-        left_velocity, right_velocity = self.parse_sensor_data(sensor_data)
+        
+        try:
+            # Here, read your sensor data, e.g., "W100, 100", from the serial port
+            sensor_data = self.ser.readline().strip().decode('utf-8')
+            # print(sensor_data)
+            if self.ser_init is not True:
+                self.send_command(1, 1)
+                self.ser_init = True
+            left_velocity, right_velocity = self.parse_sensor_data(sensor_data)
 
-        # compute odometry
-        current_time = rospy.Time.now()
-        dt = (current_time - self.last_time).to_sec()
-        self.last_time = current_time
+            left_velocity = left_velocity / 1000
+            right_velocity = right_velocity / 1000
 
-        # robot base's linear velocity is the average of the two wheels' velocities
-        linear_velocity = (right_velocity + left_velocity) / 2.0
-        # robot base's angular velocity is the difference in velocities of the two wheels / robot's width
-        angular_velocity = (right_velocity - left_velocity) / 0.1  # width of robot: 0.1m, modify if needed
+            # compute odometry
+            current_time = rospy.Time.now()
+            dt = (current_time - self.last_time).to_sec()
+            self.last_time = current_time
 
-        # compute change in x, y, and theta
-        delta_x = linear_velocity * cos(self.th) * dt
-        delta_y = linear_velocity * sin(self.th) * dt
-        delta_th = angular_velocity * dt
+            # robot base's linear velocity is the average of the two wheels' velocities
+            linear_velocity = (right_velocity + left_velocity) / 2.0
+            # robot base's angular velocity is the difference in velocities of the two wheels / robot's width
+            angular_velocity = (right_velocity - left_velocity) / 0.1  # width of robot: 0.1m, modify if needed
 
-        # update pose
-        self.x += delta_x
-        self.y += delta_y
-        self.th += delta_th
+            # compute change in x, y, and theta
+            delta_x = linear_velocity * cos(self.th) * dt
+            delta_y = linear_velocity * sin(self.th) * dt
+            delta_th = angular_velocity * dt
 
-        # create quaternion from yaw
-        odom_quat = tf.transformations.quaternion_from_euler(0, 0, self.th)
+            # update pose
+            self.x += delta_x
+            self.y += delta_y
+            self.th += delta_th
 
-        # create and publish odometry message
-        odom = Odometry()
-        odom.header.stamp = current_time
-        odom.header.frame_id = "odom"
-        odom.child_frame_id = "base_link"
+            # create quaternion from yaw
+            odom_quat = tf.transformations.quaternion_from_euler(0, 0, self.th)
 
-        odom.pose.pose.position.x = self.x
-        odom.pose.pose.position.y = self.y
-        odom.pose.pose.position.z = 0
-        odom.pose.pose.orientation = Quaternion(*odom_quat)
+            # create and publish odometry message
+            odom = Odometry()
+            odom.header.stamp = current_time
+            odom.header.frame_id = "odom"
+            odom.child_frame_id = "map"
 
-        odom.twist.twist.linear.x = linear_velocity
-        odom.twist.twist.angular.z = angular_velocity
+            odom.pose.pose.position.x = self.x
+            odom.pose.pose.position.y = self.y
+            odom.pose.pose.position.z = 0
+            odom.pose.pose.orientation = Quaternion(*odom_quat)
 
-        self.odom_pub.publish(odom)
+            odom.twist.twist.linear.x = linear_velocity
+            odom.twist.twist.angular.z = angular_velocity
 
-        # Publish TF transform
-        self.odom_broadcaster.sendTransform(
-            (self.x, self.y, 0),
-            odom_quat,
-            current_time,
-            "base_link",
-            "odom",
-        )
+            # print(self.x, self.y)
+
+            # self.odom_pub.publish(odom)
+
+            # Publish TF transform
+            self.odom_broadcaster.sendTransform(
+                (self.x, self.y, 0),
+                odom_quat,
+                current_time,
+                "robot_footprint",
+                "odom",
+            )
+               
+        except:
+            print("hsa_bot_controller decipher UART warning ... ")
+            pass
 
     def run(self):
-        r = rospy.Rate(10)  # 10 Hz
+        r = rospy.Rate(1000)  # 10 Hz
         while not rospy.is_shutdown():
             # Parse sensor_data and call publish_odometry
             self.publish_odometry()
@@ -106,6 +127,6 @@ class RobotController:
 
 
 if __name__ == "__main__":
-    rospy.init_node('robot_controller')
+    rospy.init_node('hsa_bot_controller')
     controller = RobotController()
     controller.run()

@@ -47,10 +47,11 @@ Frist, change the `frame_id` to `base_link` in `rplidar_a1.launch`.
 
 ```bash
 $ roslaunch hsa_bot real.launch
+$ rosrun gmapping slam_gmapping scan:=/scan
 ```
 
 remote control:
 ```bash
-sudo apt-get install ros-noetic-key-teleop
-rosrun key_teleop key_teleop.py
+$ sudo apt-get install ros-noetic-key-teleop
+$ rosrun key_teleop key_teleop.py
 ```
