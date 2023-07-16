@@ -9,7 +9,8 @@ SLAM mapping and navigation simulation project
  - Location and navigation based on known maps
  - Map building and navigation using gmapping
 
-## Start up
+## 1. Start up
+Here you need to install all the packages that need in our env.
 ```bash
 $ sudo apt-get install ros-noetic-move-base-msgs
 $ sudo apt-get install ros-noetic-navigation
@@ -21,14 +22,12 @@ $ sudo apt-get install ros-noetic-slam-gmapping
 
 ```
 
-## How to Launch
+## 2. How to Launch in Gazebo
 ```bash
 $ roslaunch hsa_bot sim.launch
 ```
 
-## How to Create a map
-
-### simulator
+### How to Create a map
 Open a new terminal, open `rqt`, and open robot steering plugin.
 ```bash
 rosrun gmapping slam_gmapping scan:=/hsa_bot/laser/scan
@@ -39,19 +38,33 @@ Then save the map
 rosrun map_server map_saver
 ```
 
-## real world
+## 3. How to Launch in real robot
 
-Frist, change the `frame_id` to `base_link` in `rplidar_a1.launch`.
+Some preparations:
+1. Change the `frame_id` to `base_link` in `rplidar_a1.launch`.
+2. insert the following command in your `/.bashrc`
+```
+alias hsa_mode='export ROS_IP=192.168.178.22 && export ROS_MASTER_URI=http://ubuntu:11311'
+```
 
 
-
+In real robot you need to run:
 ```bash
-$ roslaunch hsa_bot real.launch
+$ roslaunch hsa_bot real.launch has_map:=false
 $ rosrun gmapping slam_gmapping scan:=/scan
 ```
 
-remote control:
+In your local computer:
+```
+hsa_mode
+rviz
+```
+
+
+(May be required)For remote control:
 ```bash
 $ sudo apt-get install ros-noetic-key-teleop
 $ rosrun key_teleop key_teleop.py
 ```
+
+

@@ -1,36 +1,26 @@
 <launch>
+    <!-- Map server -->
+    <arg name="has_map" default="true"/>
+    <arg name="map_file" default="$(find hsa_bot)/maps/map.yaml"/>
+    
+    <group if="$(arg has_map)">
+        <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+    </group>
+
+    <group unless="$(arg has_map)">
+        <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
+        <remap from="scan" to="/scan"/>
+        </node>
+    </group>
 
     <include file="$(find hsa_bot)/launch/robot_description.launch"/>
+    
     <include file="$(find hsa_bot)/launch/amcl_real.launch"/>
-
-    <arg name="world" default="empty"/> 
-    <arg name="paused" default="false"/>
-    <arg name="use_sim_time" default="true"/>
-    <arg name="gui" default="false"/>
-    <arg name="headless" default="false"/>
-    <arg name="debug" default="false"/>
-
-
-    <!-- <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <arg name="world_name" value="$(find hsa_bot)/worlds/test.world"/>
-        <arg name="paused" value="$(arg paused)"/>
-        <arg name="use_sim_time" value="$(arg use_sim_time)"/>
-        <arg name="gui" value="$(arg gui)"/>
-        <arg name="headless" value="$(arg headless)"/>
-        <arg name="debug" value="$(arg debug)"/>
-    </include> -->
-
-    <!--spawn a robot in gazebo world-->
-    <!-- <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" 
-        output="screen" args="-urdf -param robot_description -model hsa_bot"/> -->
 
     <!--launch Lidar-->
     <include file="$(find rplidar_ros)/launch/rplidar_a1.launch" />
 
     <!--run rw_interface python srcipt-->
     <node name="robot_controller" pkg="hsa_bot" type="robot_controller.py" output="screen"/>
-
-    <!--launch rviz-->
-    <!-- <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find hsa_bot)/config/real.rviz"/> -->
 
 </launch>
