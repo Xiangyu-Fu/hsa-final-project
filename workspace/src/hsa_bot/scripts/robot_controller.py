@@ -10,20 +10,26 @@ import time
 from math import sin, cos, pi
 from typing import Tuple
 
-def cap_number(n):
-    return max(min(n, 255), -255)
+
+def remap_speed(n: int):
+    if n < 0:
+        return int((n / 255) * 155 - 100)
+    elif n > 0:
+        return int((n / 255) * 150 + 100)
+    return 0
+
 
 class DiffDriveController:
     """Given the angular velocity and linear one, compute the wheel speed on left and right."""
 
     def __init__(self, wheel_radius, wheel_separation):
         # ROS publishers for the wheel velocities
-        #self.left_wheel_pub = rospy.Publisher(
+        # self.left_wheel_pub = rospy.Publisher(
         #    "left_wheel_velocity", Int16, queue_size=10
-        #)
-        #self.right_wheel_pub = rospy.Publisher(
+        # )
+        # self.right_wheel_pub = rospy.Publisher(
         #    "right_wheel_velocity", Int16, queue_size=10
-        #)
+        # )
 
         self.max_speed = 10  # maximum speed in m/s
 
@@ -58,8 +64,8 @@ class DiffDriveController:
     def scale_velocity(self, velocity: float) -> int:
         # Scale the velocity from m/s to be in the range -255 to 255
         # This assumes a maximum possible speed; adjust as necessary
-        max_speed:float = 10.0  # maximum speed in m/s
-        return cap_number(int(255 * velocity / self.max_speed))
+        max_speed: float = 10.0  # maximum speed in m/s
+        return remap_speed(int(255 * velocity / self.max_speed))
 
 
 class RobotController:
@@ -86,7 +92,6 @@ class RobotController:
         self.th = 0.0
 
     def cmd_vel_callback(self, msg):
-        
         # print("running cmd vel calback")
 
         linear_vel = msg.linear.x
@@ -94,7 +99,9 @@ class RobotController:
         # Translate linear_vel and angular_vel to your robot's protocol
         # e.g., "c100, 100". Please modify this part as needed
 
-        left_wheel_vel, right_wheel_vel = self.diffdrive.compute( linear_vel, angular_vel)
+        left_wheel_vel, right_wheel_vel = self.diffdrive.compute(
+            linear_vel, angular_vel
+        )
 
         self.send_command(left_wheel_vel, right_wheel_vel)
 
