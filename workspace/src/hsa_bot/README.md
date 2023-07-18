@@ -66,4 +66,8 @@ $ sudo apt-get install ros-noetic-key-teleop
 $ rosrun key_teleop key_teleop.py
 ```
 
+## 4. Additional requirement
+
+1. Since we have both `ttyUSB0` and `ttyUSB1` in the connection, we assume 1) `ttyUSB00` lidar and 2) `ttyUSB1` as the serial port. So you need to ensure that lidar is plugged-in before serial port.
+
 

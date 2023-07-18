@@ -10,20 +10,22 @@ import time
 from math import sin, cos, pi
 from typing import Tuple
 
+def cap_number(n):
+    return max(min(n, 255), -255)
 
 class DiffDriveController:
     """Given the angular velocity and linear one, compute the wheel speed on left and right."""
 
     def __init__(self, wheel_radius, wheel_separation):
         # ROS publishers for the wheel velocities
-        self.left_wheel_pub = rospy.Publisher(
-            "left_wheel_velocity", Int16, queue_size=10
-        )
-        self.right_wheel_pub = rospy.Publisher(
-            "right_wheel_velocity", Int16, queue_size=10
-        )
+        #self.left_wheel_pub = rospy.Publisher(
+        #    "left_wheel_velocity", Int16, queue_size=10
+        #)
+        #self.right_wheel_pub = rospy.Publisher(
+        #    "right_wheel_velocity", Int16, queue_size=10
+        #)
 
-        self.max_speed = 0.1  # maximum speed in m/s
+        self.max_speed = 10  # maximum speed in m/s
 
         # Parameters
         self.wheel_radius = wheel_radius
@@ -50,18 +52,19 @@ class DiffDriveController:
         ) / (2 * self.wheel_radius)
 
         # Scale the wheel velocities to be in the range -255 to 255
+        # print("compute:", left_wheel_vel, right_wheel_vel)
         return self.scale_velocity(left_wheel_vel), self.scale_velocity(right_wheel_vel)
 
     def scale_velocity(self, velocity: float) -> int:
         # Scale the velocity from m/s to be in the range -255 to 255
         # This assumes a maximum possible speed; adjust as necessary
-        max_speed = 0.1  # maximum speed in m/s
-        return int(255 * velocity / self.max_speed)
+        max_speed:float = 10.0  # maximum speed in m/s
+        return cap_number(int(255 * velocity / self.max_speed))
 
 
 class RobotController:
     def __init__(self):
-        self.serial_port = "/dev/ttyUSB1"  # Change to your serial port
+        self.serial_port = "/dev/ttyUSB9"  # Change to your serial port
         self.baud_rate = 115200  # Change to your baud rate
         self.ser = serial.Serial(self.serial_port, self.baud_rate)
 
@@ -82,19 +85,23 @@ class RobotController:
         self.y = 0.0
         self.th = 0.0
 
-    def cmd_vel_callbak(self, msg):
+    def cmd_vel_callback(self, msg):
+        
+        # print("running cmd vel calback")
+
         linear_vel = msg.linear.x
         angular_vel = msg.angular.z
         # Translate linear_vel and angular_vel to your robot's protocol
         # e.g., "c100, 100". Please modify this part as needed
 
         left_wheel_vel, right_wheel_vel = self.diffdrive.compute( linear_vel, angular_vel)
-        self.send_command(linear_vel, angular_vel)
+
+        self.send_command(left_wheel_vel, right_wheel_vel)
 
     def send_command(self, left_command, right_command):
         command = "c{}, {}\n".format(left_command, right_command)
         command = f"c{left_command}, {right_command}\n"
-        print(command)
+        # rospy.loginfo(command)
         self.ser.write(command.encode())
 
     def parse_sensor_data(self, data):
@@ -144,22 +151,18 @@ class RobotController:
             odom_quat = tf.transformations.quaternion_from_euler(0, 0, self.th)
 
             # create and publish odometry message
-            # odom = Odometry()
-            # odom.header.stamp = current_time
-            # odom.header.frame_id = "odom"
-            # odom.child_frame_id = "map"
+            odom = Odometry()
+            odom.header.stamp = current_time
+            odom.header.frame_id = "odom"
+            odom.child_frame_id = "map"
 
-            # odom.pose.pose.position.x = self.x
-            # odom.pose.pose.position.y = self.y
-            # odom.pose.pose.position.z = 0
-            # odom.pose.pose.orientation = Quaternion(*odom_quat)
+            odom.pose.pose.position.x = self.x
+            odom.pose.pose.position.y = self.y
+            odom.pose.pose.position.z = 0
+            odom.pose.pose.orientation = Quaternion(*odom_quat)
 
-            # odom.twist.twist.linear.x = linear_velocity
-            # odom.twist.twist.angular.z = angular_velocity
-
-            # print(self.x, self.y)
-
-            # self.odom_pub.publish(odom)
+            odom.twist.twist.linear.x = linear_velocity
+            odom.twist.twist.angular.z = angular_velocity
 
             # Publish TF transform
             self.odom_broadcaster.sendTransform(
@@ -171,7 +174,7 @@ class RobotController:
             )
 
         except:
-            print("hsa_bot_controller decipher UART warning ... ")
+            rospy.logwarn("hsa_bot_controller decipher UART warning ... ")
             pass
 
     def run(self):
