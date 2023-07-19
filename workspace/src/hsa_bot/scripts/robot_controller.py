@@ -7,8 +7,9 @@ from tf.broadcaster import TransformBroadcaster
 import tf
 import serial
 import time
-from math import sin, cos, pi
+from math import sin, cos, pi, log
 from typing import Tuple
+import numpy as np
 
 
 def remap_speed(n: int):
@@ -20,7 +21,7 @@ def remap_speed(n: int):
 
 def rotate_clamp(left_command, right_command)-> Tuple[float, float]:
     if left_command*right_command <0.0:
-        return left_command*2, right_command*2
+        return left_command, right_command
     else:
         return left_command, right_command
 
@@ -62,6 +63,8 @@ class DiffDriveController:
         right_wheel_vel: float = (
             2 * linear_vel + angular_vel * self.wheel_separation
         ) / (2 * self.wheel_radius)
+
+        print("lr:",left_wheel_vel, right_wheel_vel)
 
         left_wheel_vel, right_wheel_vel = rotate_clamp(left_wheel_vel, right_wheel_vel)
 
@@ -139,8 +142,8 @@ class RobotController:
                 self.ser_init = True
             left_velocity, right_velocity = self.parse_sensor_data(sensor_data)
 
-            left_velocity = left_velocity / 1200
-            right_velocity = right_velocity / 1200
+            left_velocity = left_velocity / 1600
+            right_velocity = right_velocity / 1600
 
             # compute odometry
             current_time = rospy.Time.now()
