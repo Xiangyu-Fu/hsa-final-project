@@ -14,14 +14,14 @@ import numpy as np
 
 def remap_speed(n: int):
     if n < 0:
-        return int((n / 255) * 185 - 70)
+        return int((n / 255) * 150 - 70)
     elif n > 0:
-        return int((n / 255) * 185 + 70)
+        return int((n / 255) * 150 + 70)
     return 0
 
 def rotate_clamp(left_command, right_command)-> Tuple[float, float]:
     if left_command*right_command <0.0:
-        return left_command, right_command
+        return left_command * 2, right_command * 2
     else:
         return left_command, right_command
 
@@ -142,8 +142,8 @@ class RobotController:
                 self.ser_init = True
             left_velocity, right_velocity = self.parse_sensor_data(sensor_data)
 
-            left_velocity = left_velocity / 1600
-            right_velocity = right_velocity / 1600
+            left_velocity = left_velocity / 1000
+            right_velocity = right_velocity / 1000
 
             # compute odometry
             current_time = rospy.Time.now()

@@ -71,3 +71,4 @@ $ rosrun key_teleop key_teleop.py
 1. Since we have both `ttyUSB0` and `ttyUSB1` in the connection, we assume 1) `ttyUSB00` lidar and 2) `ttyUSB1` as the serial port. So you need to ensure that lidar is plugged-in before serial port.
 
 
+sudo systemctl restart ros-startup.service

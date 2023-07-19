@@ -50,8 +50,8 @@ def getKey():
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
     return key
 
-speed = .2
-turn = 1
+speed = .1
+turn = 2
 
 def vels(speed,turn):
     return "currently:\tspeed %s\tturn %s " % (speed,turn)
@@ -106,9 +106,9 @@ if __name__=="__main__":
             target_turn = turn * th
 
             if target_speed > control_speed:
-                control_speed = min( target_speed, control_speed + 0.02 )
+                control_speed = min( target_speed, control_speed + 0.005 )
             elif target_speed < control_speed:
-                control_speed = max( target_speed, control_speed - 0.02 )
+                control_speed = max( target_speed, control_speed - 0.005 )
             else:
                 control_speed = target_speed
 
