@@ -13,10 +13,16 @@ from typing import Tuple
 
 def remap_speed(n: int):
     if n < 0:
-        return int((n / 255) * 155 - 100)
+        return int((n / 255) * 185 - 70)
     elif n > 0:
-        return int((n / 255) * 150 + 100)
+        return int((n / 255) * 185 + 70)
     return 0
+
+def rotate_clamp(left_command, right_command)-> Tuple[float, float]:
+    if left_command*right_command <0.0:
+        return left_command*2, right_command*2
+    else:
+        return left_command, right_command
 
 
 class DiffDriveController:
@@ -57,6 +63,8 @@ class DiffDriveController:
             2 * linear_vel + angular_vel * self.wheel_separation
         ) / (2 * self.wheel_radius)
 
+        left_wheel_vel, right_wheel_vel = rotate_clamp(left_wheel_vel, right_wheel_vel)
+
         # Scale the wheel velocities to be in the range -255 to 255
         # print("compute:", left_wheel_vel, right_wheel_vel)
         return self.scale_velocity(left_wheel_vel), self.scale_velocity(right_wheel_vel)
@@ -70,7 +78,7 @@ class DiffDriveController:
 
 class RobotController:
     def __init__(self):
-        self.serial_port = "/dev/ttyUSB9"  # Change to your serial port
+        self.serial_port = "/dev/ttyUSB0"  # Change to your serial port
         self.baud_rate = 115200  # Change to your baud rate
         self.ser = serial.Serial(self.serial_port, self.baud_rate)
 
@@ -105,10 +113,12 @@ class RobotController:
 
         self.send_command(left_wheel_vel, right_wheel_vel)
 
+
+
     def send_command(self, left_command, right_command):
         command = "c{}, {}\n".format(left_command, right_command)
         command = f"c{left_command}, {right_command}\n"
-        # rospy.loginfo(command)
+        rospy.loginfo(command)
         self.ser.write(command.encode())
 
     def parse_sensor_data(self, data):
@@ -129,8 +139,8 @@ class RobotController:
                 self.ser_init = True
             left_velocity, right_velocity = self.parse_sensor_data(sensor_data)
 
-            left_velocity = left_velocity / 1000
-            right_velocity = right_velocity / 1000
+            left_velocity = left_velocity / 1200
+            right_velocity = right_velocity / 1200
 
             # compute odometry
             current_time = rospy.Time.now()

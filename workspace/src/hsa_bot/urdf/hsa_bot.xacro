@@ -335,7 +335,7 @@
   </joint>
 
   <!--laser_link-->
-  <link name="hokuyo">
+  <link name="laser">
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
@@ -358,11 +358,11 @@
     </inertial>
   </link>
 
-  <joint name="hokuyo_joint" type="fixed">
+  <joint name="laser_joint" type="fixed">
     <axis xyz="0 0 0" />
-    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <origin xyz="0 0 0.1" rpy="0 0 1.57"/>
     <parent link="base_link"/>
-    <child link="hokuyo"/>
+    <child link="laser"/>
   </joint>
 
 </robot>

@@ -1,5 +1,5 @@
 <launch>
     <!--launch rviz-->
-    <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find hsa_bot)/config/real.rviz"/>
+    <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find hsa_bot)/config/hsa.rviz"/>
 
 </launch>
