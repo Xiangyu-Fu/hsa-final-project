@@ -1,6 +1,42 @@
 # hsa-final-project
 
-## System requirement
+## ROS requirement
+
+version: ROS noetic
+
+### required packages
+
+Install the packages first:
+```bash
+$ sudo apt-get install ros-noetic-move-base-msgs
+$ sudo apt-get install ros-noetic-navigation
+$ sudo apt-get install ros-noetic-map-server
+$ sudo apt-get install ros-noetic-move-base
+$ sudo apt-get install ros-noetic-amcl
+$ sudo apt-get install ros-noetic-slam-gmapping
+```
+
+### How to run ROS simulation testing 
+
+Clone the project
+```bash
+$ git clone git@github.com:Xiangyu-Fu/hsa-final-project.git
+$ git submodule update --init --recursive
+```
+
+Build the workspace, notice the package `rplidar_ros` only required in real robot.
+```bash
+$ cd workspace
+$ catkin build
+$ source devel/setup.bash
+```
+
+Run the simulation,
+```bash
+$ roslaunch hsa_bot sim.launch
+```
+
+## Real Rboot System requirement
 
 Machine: Raspberry Pi 4B
 
@@ -10,7 +46,3 @@ OS: Ubuntu Server 20.04 LTS
 
 - `evdev` for linux input system read
 
-
-
-## BUG
-PIN error, arduino pin4 doesn't support interrupt, connect the pin 4 to pin 3.
