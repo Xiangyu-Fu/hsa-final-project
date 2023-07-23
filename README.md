@@ -37,7 +37,9 @@ $ roslaunch hsa_bot sim.launch
 ```
 
 Now, only Rviz should be opened, and it look like this:
-![image](https://github.com/Xiangyu-Fu/hsa-final-project/assets/54738414/89b76185-1046-4e00-ba63-6e6e2ad8893e)
+
+![image](https://github.com/Xiangyu-Fu/hsa-final-project/assets/54738414/c326f33c-69ce-473b-b201-3fcb60e71a58)
+
 
 
 ## Real Rboot System requirement
