@@ -58,11 +58,11 @@ class DiffDriveController:
         :return: left and right wheel velocities in the range -255 to 255
         """
         left_wheel_vel: float = (
-            2 * linear_vel - angular_vel * self.wheel_separation
-        ) / (2 * self.wheel_radius)
+             linear_vel - angular_vel * self.wheel_separation / 2
+        ) /  self.wheel_radius
         right_wheel_vel: float = (
-            2 * linear_vel + angular_vel * self.wheel_separation
-        ) / (2 * self.wheel_radius)
+             linear_vel + angular_vel * self.wheel_separation / 2
+        ) /  self.wheel_radius
 
         print("lr:",left_wheel_vel, right_wheel_vel)
 
