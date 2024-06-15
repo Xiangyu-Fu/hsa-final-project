@@ -11,6 +11,9 @@ This repository contains most of the information of our implementation of "hsa-b
 
 The main implementation is located at `workspace/src/hsa_bot`, we have a README.md there for the explaination on the package. The `controller` directory contains the Gamepad controller, communicating over network with ros-core to issue `cmd_vel` command. The `workspace/src/rplidar_ros` direcotory is the submodule contains a submodule to read from the lidar sensor.
 
+![IMG_4520](https://github.com/Xiangyu-Fu/hsa-final-project/assets/54738414/321f1113-b33e-4f6b-8a5d-2c724b44eef0)
+
+
 ## ROS requirement
 
 version: ROS noetic
